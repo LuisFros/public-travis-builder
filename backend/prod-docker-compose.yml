@@ -4,7 +4,8 @@ services:
     container_name: backend_web
     image: 564835583352.dkr.ecr.us-east-1.amazonaws.com/backend_web:latest
     command: bash -c "bundle exec rake db:migrate && bundle exec rails s -p 80 -b '0.0.0.0'"
-    restart: always
+    volumes:
+      - .:/produciton
     ports:
       - "80:80"
     env_file:
