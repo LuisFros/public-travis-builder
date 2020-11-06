@@ -10,6 +10,8 @@ branches:
     only:
         - master
 
+
+
 install:
   - echo "install nothing!" #Install goes here
 
@@ -21,15 +23,17 @@ script:
 
 #This script will upload the built containers to ECR to be deployed on a single EC2 instance with docker
 #Give everything to ECR
-after_success:
+before_deploy:
+  - cd backend
   - docker --version  # document the version travis is using
   - pip install --user awscli # install aws cli w/o sudo
   - export PATH=$PATH:$HOME/.local/bin # put aws in the path
   - eval $(aws ecr get-login --region us-east-1 --no-include-email) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
-  - docker build -t backend_web -f backend/Dockerfile .
+  - docker build -t backend_web .
   - docker tag backend_web:latest $AWS_ECR_API:latest
   - docker push $AWS_ECR_API:latest
   - docker images
+  - cd ..
 
 deploy:
 - provider: s3 #To upload the code to s3
