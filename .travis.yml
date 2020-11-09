@@ -13,10 +13,10 @@ branches:
 
 
 install:
-  - echo "install nothing!" #Install goes here
+  - bundle install --jobs=3 --retry=3
 
 script:
-  - echo "no tests!" #Tests go here
+  - bundle exec rake rspec
   - zip -r latest *
   - mkdir -p deploy_folder
   - mv latest.zip deploy_folder/latest.zip
