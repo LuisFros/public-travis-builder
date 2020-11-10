@@ -65,22 +65,27 @@ class InvitationsController < ApplicationController
         
         #current_user = User.find_by(id: params[:user_id])
         invitation = Invitation.find_by(id: params[:invitation_id])
+        if valid_token? == current_user.username
+            if current_user && invitation
+                room = Room.find_by(id: invitation.room_id)
+                invitation.update(state: params[:state])
 
-        if current_user && invitation
-            room = Room.find_by(id: invitation.room_id)
-            invitation.update(state: params[:state])
-
-            if params[:state] == "Accepted"
-                room.users << current_user
+                if params[:state] == "Accepted"
+                    room.users << current_user
+                end
+            else
+                return render json:{
+                    "error" => "could not update record: current user of invitation not found."
+                }
             end
-        else
-            return render json:{
-                "error" => "could not update record: current user of invitation not found."
+            return render json: {
+                "invitation": invitation
             }
+        else
+            return render json: {
+                "error": "you don't have permissions."
+             }
         end
-        return render json: {
-            "invitation": invitation
-        }
     end
 
 end
