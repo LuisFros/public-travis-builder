@@ -37,16 +37,16 @@ class UsersController < ApplicationController
     end
   end
   
-  def uploadphoto()
-    @user = User.find_by(username: params[:username])
-    #@user.photo.purge
-    #@user.photo.attach(params[:photo])
-    extension = params[:photo].content_type.split('/')[1]
-    filename = "#{SecureRandom.hex(15)}.#{extension}"
+  # def uploadphoto()
+  #   @user = User.find_by(username: params[:username])
+  #   #@user.photo.purge
+  #   #@user.photo.attach(params[:photo])
+  #   extension = params[:photo].content_type.split('/')[1]
+  #   filename = "#{SecureRandom.hex(15)}.#{extension}"
     
-    s3 = Aws::S3::Resource.new(region:'us-west-2')
-    obj = s3.bucket('chatroom-profileimg-upload').object(filename)
-    obj.upload_file(params[:photo].tempfile)
+  #   s3 = Aws::S3::Resource.new(region:'us-west-2')
+  #   obj = s3.bucket('chatroom-profileimg-upload').object(filename)
+  #   obj.upload_file(params[:photo].tempfile)
 
     source = "https://chatroom-profileimg-resized.s3-us-west-2.amazonaws.com/"
     url_photo = "#{source}#{filename}"
