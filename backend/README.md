@@ -28,8 +28,6 @@ Las llamadas a la API se encuentran documentadas por medio de collections de pos
 
 Consideraciones generales
 
-- Nombre del dominio: www.berlinichat.ga
-- Método de acceso al servidor: `ssh -i path/to/.pem_file ubuntu@34.232.25.58` (archivo .pem entregado vía Canvas)
 - Puntos realizados están marcados con :heavy_check_mark:
 
 Sobre la aplicación

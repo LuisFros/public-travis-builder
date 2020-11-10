@@ -10,8 +10,28 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "roomzssd",
+							"type": "text"
+						},
+						{
+							"key": "private_room",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
-					"raw": "localhost:3000/rooms/?name=roomsitafinal",
+					"raw": "localhost:3000/rooms/",
 					"host": [
 						"localhost"
 					],
@@ -23,7 +43,13 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "roomsitafinal"
+							"value": "roomsitafinal11",
+							"disabled": true
+						},
+						{
+							"key": "private_room",
+							"value": "false",
+							"disabled": true
 						}
 					]
 				}
@@ -54,14 +80,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/rooms/2",
+					"raw": "localhost:3000/rooms/1",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"rooms",
-						"2"
+						"1"
 					]
 				}
 			},
@@ -77,17 +103,17 @@
 					"urlencoded": [
 						{
 							"key": "user_id",
-							"value": "7",
+							"value": "1",
 							"type": "text"
 						},
 						{
 							"key": "room_id",
-							"value": "2",
+							"value": "1",
 							"type": "text"
 						},
 						{
 							"key": "message",
-							"value": "hola, soy el mauritox finald",
+							"value": "hola, soy el mauritox",
 							"type": "text"
 						}
 					],
@@ -111,24 +137,139 @@
 			"response": []
 		},
 		{
-			"name": "Get Room Messages Pdf",
+			"name": "send invitation",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "receiver_username",
+							"value": "mauritoxx",
+							"type": "text"
+						},
+						{
+							"key": "room_id",
+							"value": "46",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
-					"raw": "localhost:3000/getroommessagesonpdf?room_id=1",
+					"raw": "localhost:3000/invitation",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"getroommessagesonpdf"
+						"invitation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my invitations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/invitation?user_id=1&state=Pending",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"invitation"
 					],
 					"query": [
 						{
-							"key": "room_id",
+							"key": "user_id",
 							"value": "1"
+						},
+						{
+							"key": "state",
+							"value": "Pending"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit invitation state",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "state",
+							"value": "Accepted",
+							"type": "text"
+						},
+						{
+							"key": "invitation_id",
+							"value": "16",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/invitation",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"invitation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my private rooms",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user_id",
+						"value": "134",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/privaterooms",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"privaterooms"
 					]
 				}
 			},

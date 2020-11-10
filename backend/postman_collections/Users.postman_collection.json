@@ -36,7 +36,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/users/?username=mauritox",
+					"raw": "localhost:3000/users/?username=mauritoxx",
 					"host": [
 						"localhost"
 					],
@@ -48,7 +48,7 @@
 					"query": [
 						{
 							"key": "username",
-							"value": "mauritox"
+							"value": "mauritoxx"
 						}
 					]
 				}
@@ -116,90 +116,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Upload avatar",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": "localhost:3000/uploadphoto"
-			},
-			"response": [
-				{
-					"name": "Upload avatar",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "photo",
-									"contentType": "f",
-									"type": "file",
-									"src": "/file_to_jpg_or_png"
-								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/uploadphoto?username=USERNAME",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"uploadphoto"
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "USERNAME"
-								},
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"04ca74180395b0fd1816SDsa332063ad\""
-						},
-						{
-							"key": "Cache-Control",
-							"value": "max-age=0, private, must-revalidate"
-						},
-						{
-							"key": "Set-Cookie",
-							"value": "_myapp_session=y%BA%2BHSboSDWwwr9qAhmJ%2FK5wVGRGn0Zfz9c9ict8JZOyDg58luZSKTCcAtsIk4jfXhTXELJFdzLaYdmq95UgI5mfFeMUAlqC%2Bi8c5YeN26Tyl6stEM6AanLUf3jnR8cB3GCtZFvWwmKMYE1qPDiA%3D--5LKTzULMohBKhD%2Bs--FZIkDYgAU9U6Wfsg7Em4Sg%3D%3D; path=/; HttpOnly"
-						},
-						{
-							"key": "X-Request-Id",
-							"value": "a84237ba-0sdsa-acsc0-ae2d-12edb3aa8f94"
-						},
-						{
-							"key": "X-Runtime",
-							"value": "48.571249"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"id\": 1,\n    \"username\": \"gato\",\n    \"created_at\": \"2020-10-05T08:37:27.790Z\",\n    \"updated_at\": \"2020-10-05T08:42:09.043Z\",\n    \"thumbnail_url\": \"https://chatroom-profileimg-resized.s3-us-west-2.amazonaws.com/YwZQXTMxcPXN1K4cu6J5mbed.png\"\n}"
-				}
-			]
 		}
 	],
 	"protocolProfileBehavior": {}
