@@ -1,4 +1,4 @@
-class RoomsController < ApplicationController
+class RoomsController < ApiController
   skip_before_action :authorized
   # Loads:
   # @rooms = all rooms
@@ -6,7 +6,7 @@ class RoomsController < ApplicationController
   before_action :load_entities
 
   def index
-    @rooms = Room.all
+    @rooms = Room.where(private_room: 'false')
     json = Rails.cache.fetch(Room.cache_key(@rooms)) do 
       @rooms
     end
@@ -19,18 +19,20 @@ class RoomsController < ApplicationController
 
   def create
     room_name = params[:name]
+    private_room = params[:private_room]
+    user = params[:user_id]
     if Room.find_by name: room_name
       return render json: {
         "error": "Another room already has that name"
       }
     else
-      params = ActionController::Parameters.new({
-        room: {
-          name: room_name
-        }
-      })
       @room = Room.new permitted_parameters
       if @room.save
+        # if room is created as a private one, we make user join room automatically.
+        if private_room
+          current_user = User.find_by(id: params[:user_id])
+          current_user.rooms << @room
+        end
         render json: @room
       else
         return render json: {
@@ -55,7 +57,10 @@ class RoomsController < ApplicationController
   def show
     room = Room.find_by(id: params[:id])
     if room
-      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id]).select('room_messages.*, users.username, users.thumbnail_url')
+      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id], hidden: false)
+        .select('room_messages.id, room_messages.room_id, room_messages.user_id, room_messages.message,'\
+          'room_messages.created_at, room_messages.updated_at, users.username, users.thumbnail_url'
+        )
       # render json: {
       #   "room": room,
       #   "messages": messages
@@ -113,7 +118,13 @@ class RoomsController < ApplicationController
     return response_body["url_pdf"]
   end
 
-
+  def private
+    current_user = User.find_by(id: params[:user_id])
+    private_rooms = current_user.rooms
+    return render json: {
+      "privaterooms": private_rooms
+    }
+  end
   protected
 
   def load_entities
@@ -122,6 +133,6 @@ class RoomsController < ApplicationController
   end
 
   def permitted_parameters
-    params.permit(:name)
+    params.permit(:name, :private_room, :user_id)
   end
 end
