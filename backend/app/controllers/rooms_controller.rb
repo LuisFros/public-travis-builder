@@ -44,9 +44,25 @@ class RoomsController < ApplicationController
         render json: @room
       else
         return render json: {
-          "error": "error creating room."
+          "error": "Another room already has that name"
         }
+      else
+        @room = Room.new permitted_parameters
+        if @room.save
+          if private_room
+            current_user.rooms << @room
+          end
+          render json: @room
+        else
+          return render json: {
+            "error": "error creating room."
+          }
+        end
       end
+    else
+      return render json: {
+        "error": "you don't have permissions."
+      }
     end
   end
 

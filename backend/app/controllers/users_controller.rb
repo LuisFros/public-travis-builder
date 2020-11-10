@@ -12,17 +12,16 @@ class UsersController < ApplicationController
   def create
     parameters = ActionController::Parameters.new({
       user: {
-        username: "",
-        password: "password"
+        username: params[:user][:username],
+        password: "Password12?"
       }
     })
-    if params[:anon] == "true"
-      parameters[:user][:username] = "anon" + SecureRandom.hex(15)
-    else
-      parameters[:user][:username] = params[:username]
+    if params[:anon]
+      parameters[:user][:username] = "anon" + SecureRandom.hex(15) + "@anon.com"
     end
     @user = User.create(parameters.require(:user).permit(:username))
-    render json: @user 
+    resp = Cognito.create_user({USERNAME: parameters[:user][:username], PASSWORD: "Password12?"})
+    render json: @user
   end
 
   def set_email

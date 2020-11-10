@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   match 'admin' => 'adminsessions#destroy', :as => :destroy_admin_user_session, :via => :delete
   resources :room_messages
   resources :rooms
-  resources :users, only: [:new, :create, :uploadphoto]
   resource :invitation
 
   root 'rails/welcome#index'
@@ -16,7 +15,8 @@ Rails.application.routes.draw do
   get 'authorized', to: 'sessions#page_requires_login'
   post 'sendmessage', to: 'room_messages#new_message'
   post 'change_email', to: 'users#set_email'
-  post 'uploadphoto', to: "users#uploadphoto"
+  post 'uploadphoto', to: 'users#uploadphoto'
+  post 'createuser', to: 'users#create'
   get 'getroommessagesonpdf', to: 'rooms#getroommessagespdf'
   post 'privaterooms', to: 'rooms#private'
   get 'userdata', to: 'users#getdata'

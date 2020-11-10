@@ -55,6 +55,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    aes_key_wrap (1.1.0)
     arbre (1.3.0)
       activesupport (>= 3.0.0, < 6.1)
       ruby2_keywords (>= 0.0.2, < 1.0)
@@ -1007,6 +1008,7 @@ GEM
     aws-sigv2 (1.0.1)
     aws-sigv4 (1.2.2)
       aws-eventstream (~> 1, >= 1.0.2)
+    bindata (2.4.8)
     bindex (0.8.1)
     bootsnap (1.4.8)
       msgpack (~> 1.0)
@@ -1218,6 +1220,8 @@ PLATFORMS
 DEPENDENCIES
   activeadmin
   aws-sdk
+  aws-sdk-cognitoidentity
+  aws-sdk-cognitoidentityprovider
   bootsnap (>= 1.1.0)
   byebug
   capybara (>= 2.15)
