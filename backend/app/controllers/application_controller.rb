@@ -1,10 +1,13 @@
 class ApiController < ActionController::API
+  include ActionController::Cookies
   include ActionController::RequestForgeryProtection
+  include ApplicationHelper
   protect_from_forgery prepend: true
   before_action :authorized
   helper_method :current_user
   helper_method :logged_in?
   after_action :custom_headers
+
 
   def custom_headers
     if Rails.env.production? 
@@ -36,6 +39,22 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     !current_admin_user.nil? && current_admin_user.is_admin
+  end
+
+  def valid_token?
+    token = session[:access_token]
+    decoded_body = Base64.decode64(token.split('.')[1])
+    parsed_json = ActiveSupport::JSON.decode(decoded_body)
+    begin
+      username = parsed_json["username"]
+      return username
+    rescue => e
+      return false
+    end
+  end
+
+  def authorized
+    redirect_to '/welcome' unless logged_in?
   end
 
   def authenticate_admin_user!

@@ -31,15 +31,21 @@ class InvitationsController < ApiController
                 "error" => "receiver user not found"
             }
         end
-        @invitation = Invitation.create({
-            state: "Pending",
-            sender_id: params[:user_id],
-            receiver_id: receiver_user.id,
-            room_id: params[:room_id]
-        })  
-        return render json: {
-            "invitation": @invitation
-        }
+        if valid_token? == current_user.username
+            @invitation = Invitation.create({
+                state: "Pending",
+                sender_id: params[:user_id],
+                receiver_id: receiver_user.id,
+                room_id: params[:room_id]
+            })  
+            return render json: {
+                "invitation": @invitation
+            }
+        else
+            return render json: {
+                "error": "you don't have permissions."
+             }
+        end
     end
 
     def show
@@ -49,10 +55,16 @@ class InvitationsController < ApiController
             }
         end
         current_user = User.find_by(id: params[:user_id])
-        invitations = Invitation.joins(:room).joins(:receiver).where(receiver_id: current_user.id, state: params[:state])
-        return render json: {
-            "invitations": invitations
-        }
+        if valid_token? == current_user.username
+            invitations = Invitation.joins(:room).joins(:receiver).where(receiver_id: current_user.id, state: params[:state])
+            return render json: {
+                "invitations": invitations
+            }
+        else
+            return render json: {
+                "error": "you don't have permissions."
+             }
+        end
     end
 
     def update
@@ -64,22 +76,27 @@ class InvitationsController < ApiController
         
         current_user = User.find_by(id: params[:user_id])
         invitation = Invitation.find_by(id: params[:invitation_id])
+        if valid_token? == current_user.username
+            if current_user && invitation
+                room = Room.find_by(id: invitation.room_id)
+                invitation.update(state: params[:state])
 
-        if current_user && invitation
-            room = Room.find_by(id: invitation.room_id)
-            invitation.update(state: params[:state])
-
-            if params[:state] == "Accepted"
-                room.users << current_user
+                if params[:state] == "Accepted"
+                    room.users << current_user
+                end
+            else
+                return render json:{
+                    "error" => "could not update record: current user of invitation not found."
+                }
             end
-        else
-            return render json:{
-                "error" => "could not update record: current user of invitation not found."
+            return render json: {
+                "invitation": invitation
             }
+        else
+            return render json: {
+                "error": "you don't have permissions."
+             }
         end
-        return render json: {
-            "invitation": invitation
-        }
     end
 
 end

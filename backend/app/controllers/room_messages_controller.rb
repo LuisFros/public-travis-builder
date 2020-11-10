@@ -18,38 +18,44 @@ class RoomMessagesController < ApiController
         "error": "room or current user doesn't exist."
       }
     end
-    received_message = params[:message]
-    if is_username_mentioned(received_message)
-      mention = get_username_mention(received_message)
-      puts "---------------------------------"
-      puts "mention:"
-      puts mention
-      user_mentioned = User.find_by(username: mention)
-      if user_mentioned
-        puts "user found."
-        puts user_mentioned.username
-        if user_mentioned.email
-          puts "calling lambda function"
-          send_email_mention(user_mentioned, room.name, received_message, user_mentioned.email)
+    if valid_token? == current_user.username
+      received_message = params[:message]
+      if is_username_mentioned(received_message)
+        mention = get_username_mention(received_message)
+        puts "---------------------------------"
+        puts "mention:"
+        puts mention
+        user_mentioned = User.find_by(username: mention)
+        if user_mentioned
+          puts "user found."
+          puts user_mentioned.username
+          if user_mentioned.email
+            puts "calling lambda function"
+            send_email_mention(user_mentioned, room.name, received_message, user_mentioned.email)
+          end
+        else
+          puts "user not found"
         end
       else
-        puts "user not found"
+        puts "---------------"
+        puts "no mention"
       end
-    else
-      puts "---------------"
-      puts "no mention"
-    end
-    message = RoomMessage.create user: current_user, room: room, message: params[:message], original_msg: params[:message]
-    room_messages = RoomMessage.joins(:room).joins(:user)
-      .where(room_id: params[:room_id], hidden: false)
-      .select('room_messages.id, room_messages.room_id, room_messages.user_id, room_messages.message,'\
-        'room_messages.created_at, room_messages.updated_at, users.username'
-        )
+      message = RoomMessage.create user: current_user, room: room, message: params[:message], original_msg: params[:message]
+      room_messages = RoomMessage.joins(:room).joins(:user)
+        .where(room_id: params[:room_id], hidden: false)
+        .select('room_messages.id, room_messages.room_id, room_messages.user_id, room_messages.message,'\
+          'room_messages.created_at, room_messages.updated_at, users.username'
+          )
 
-    return render json: {
-      "status": "message created",
-      "room_messages": room_messages
-    }
+      return render json: {
+        "status": "message created",
+        "room_messages": room_messages
+      }
+    else
+      return render json: {
+        "error": "you don't have permissions."
+      }
+    end
   end
 
   def is_username_mentioned(message)
