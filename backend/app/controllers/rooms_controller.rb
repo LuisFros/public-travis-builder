@@ -20,25 +20,32 @@ class RoomsController < ApiController
   def create
     room_name = params[:name]
     private_room = params[:private_room]
-    user = params[:user_id]
-    if Room.find_by name: room_name
-      return render json: {
-        "error": "Another room already has that name"
-      }
-    else
-      @room = Room.new permitted_parameters
-      if @room.save
-        # if room is created as a private one, we make user join room automatically.
-        if private_room
-          current_user = User.find_by(id: params[:user_id])
-          current_user.rooms << @room
-        end
-        render json: @room
-      else
+    current_user = User.find_by(id: params[:user_id])
+    puts current_user.username
+    puts valid_token?
+    if valid_token? == current_user.username
+      user = params[:user_id]
+      if Room.find_by name: room_name
         return render json: {
-          "error": "error creating room."
+          "error": "Another room already has that name"
         }
+      else
+        @room = Room.new permitted_parameters
+        if @room.save
+          if private_room
+            current_user.rooms << @room
+          end
+          render json: @room
+        else
+          return render json: {
+            "error": "error creating room."
+          }
+        end
       end
+    else
+      return render json: {
+        "error": "you don't have permissions."
+      }
     end
   end
 
