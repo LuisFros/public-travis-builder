@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
 
   def authorized
     redirect_to '/welcome' unless logged_in?
-
+  end
   def authenticate_admin_user!
     redirect_to new_admin_user_session_path unless logged_in?
   end
