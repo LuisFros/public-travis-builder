@@ -1,4 +1,4 @@
-class ApplicationController < ActionController::API
+class ApiController < ActionController::API
   include ActionController::RequestForgeryProtection
   #before_action :authorized
   helper_method :current_user
@@ -22,12 +22,24 @@ class ApplicationController < ActionController::API
     User.find_by(username: decoded[0]["email"])
   end
 
+end
+
+class ApplicationController < ActionController::Base
+  protect_from_forgery prepend: true
+
+  before_action :authenticate_admin_user!
+  #auto_session_timeout Rails.configuration.session_timeout_length
+  
+  #has to be after auto_session_timeout so that prepend will not be overwritten.
+  #protect_from_forgery with: :exception, prepend: true
+  # your code here
+
   def logged_in?
-    !current_user.nil?
+    !current_admin_user.nil? && current_admin_user.is_admin
   end
 
-  def authorized
-    redirect_to '/welcome' unless logged_in?
+  def authenticate_admin_user!
+    redirect_to new_admin_user_session_path unless logged_in?
   end
 
   def manage_auth

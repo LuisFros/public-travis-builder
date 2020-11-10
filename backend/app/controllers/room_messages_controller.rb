@@ -1,4 +1,4 @@
-class RoomMessagesController < ApplicationController
+class RoomMessagesController < ApiController
   #before_action :load_entities
   #skip_before_action :authorized
   before_action :manage_auth
@@ -81,8 +81,12 @@ class RoomMessagesController < ApplicationController
       puts "---------------"
       puts "no mention"
     end
-    message = RoomMessage.create user: current_user, room: room, message: params[:message]
-    room_messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:room_id]).select('room_messages.*, users.username')
+    message = RoomMessage.create user: current_user, room: room, message: params[:message], original_msg: params[:message]
+    room_messages = RoomMessage.joins(:room).joins(:user)
+      .where(room_id: params[:room_id], hidden: false)
+      .select('room_messages.id, room_messages.room_id, room_messages.user_id, room_messages.message,'\
+        'room_messages.created_at, room_messages.updated_at, users.username'
+        )
 
     return render json: {
       "status": "message created",

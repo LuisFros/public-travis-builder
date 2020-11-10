@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
+  ActiveAdmin.routes(self)
+  match 'admin/login' => 'adminsessions#new', :as => :new_admin_user_session, :via => :get
+  match 'admin/login' => 'adminsessions#create', :as => :create_admin_user_session, :via => :post
+  match 'admin' => 'adminsessions#destroy', :as => :destroy_admin_user_session, :via => :delete
   resources :room_messages
   resources :rooms
   resources :users, only: [:new, :create, :uploadphoto]
   resource :invitation
 
-  root 'sessions#welcome'
+  root 'rails/welcome#index'
   get 'welcome', to: 'sessions#welcome'
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'

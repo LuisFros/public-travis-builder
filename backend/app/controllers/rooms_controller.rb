@@ -65,7 +65,10 @@ class RoomsController < ApplicationController
   def show
     room = Room.find_by(id: params[:id])
     if room
-      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id]).select('room_messages.*, users.username, users.thumbnail_url')
+      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id], hidden: false)
+        .select('room_messages.id, room_messages.room_id, room_messages.user_id, room_messages.message,'\
+          'room_messages.created_at, room_messages.updated_at, users.username, users.thumbnail_url'
+        )
       # render json: {
       #   "room": room,
       #   "messages": messages

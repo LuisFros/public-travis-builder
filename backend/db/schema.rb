@@ -15,25 +15,30 @@ ActiveRecord::Schema.define(version: 2020_10_30_033720) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.string "namespace"
+    t.text "body"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.string "author_type"
+    t.bigint "author_id"
     t.datetime "created_at", null: false
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.datetime "updated_at", null: false
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
-  create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.bigint "byte_size", null: false
-    t.string "checksum", null: false
+  create_table "invitations", force: :cascade do |t|
+    t.string "state"
+    t.bigint "sender_id"
+    t.bigint "receiver_id"
+    t.bigint "room_id"
     t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+    t.datetime "updated_at", null: false
+    t.index ["receiver_id"], name: "index_invitations_on_receiver_id"
+    t.index ["room_id"], name: "index_invitations_on_room_id"
+    t.index ["sender_id"], name: "index_invitations_on_sender_id"
   end
 
   create_table "invitations", force: :cascade do |t|
@@ -54,13 +59,14 @@ ActiveRecord::Schema.define(version: 2020_10_30_033720) do
     t.text "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "hidden", default: false
+    t.text "original_msg"
     t.index ["room_id"], name: "index_room_messages_on_room_id"
     t.index ["user_id"], name: "index_room_messages_on_user_id"
   end
 
   create_table "rooms", force: :cascade do |t|
     t.string "name"
-    t.boolean "reversed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "private_room", default: false
@@ -79,10 +85,10 @@ ActiveRecord::Schema.define(version: 2020_10_30_033720) do
     t.datetime "updated_at", null: false
     t.string "email"
     t.string "thumbnail_url", default: "https://chatroom-profileimg-resized.s3-us-west-2.amazonaws.com/user.svg", null: false
+    t.boolean "is_admin", default: false, null: false
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "room_messages", "rooms"
   add_foreign_key "room_messages", "users"
 end
