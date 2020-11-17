@@ -1,4 +1,18 @@
  ### Iniciar:
+## REFERENCES: 
+- https://aws.amazon.com/premiumsupport/knowledge-center/codedeploy-agent-non-root-profile/
+- https://docs.aws.amazon.com/codedeploy/latest/userguide/troubleshooting-deployments.html#troubleshooting-deployments-lifecycle-event-failures
+
+
+## CI/CD
+1. Travic CI se usa para hacer el CI/CD conecatado con CodeDeploy + S3.
+2. El release se comprime en un ZIP
+3. Se hace un build en Docker de la imagen actual y se sube a ECR
+4. Se sube al archivo ZIP comprimido a S3 para que CodeDeploy pueda acceder a el.
+5. Se revisa el Bucket S3 con el release, se descomprime y se corren los scripts definidos en `appspec.yml` y guardados en `scripts/`.
+6. Travis espera a que el deploy sea exitoso.
+7. CodeDeploy trae la imagen de ECR y corre el contenedor.
+8. Para poder configurar CodeDeploy y correr Docker en las instancias del AutoScaling group, se usa el siguiente `UserData` para iniciar una instancia EC2. 
 ```
 cd backend  
 sudo docker-compose -f local-docker-compose.yml build  

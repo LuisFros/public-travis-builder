@@ -1,6 +1,8 @@
 #Deploy script for Foku-api
 
 language: ruby
+rvm:
+  - 2.5.8
 
 env:
   - AWS_USER_ID="564835583352" AWS_ECR_API="564835583352.dkr.ecr.us-east-1.amazonaws.com/backend_web" AWS_REGION="us-east-1" REFERENCE="https://github.com/travis-ci/cat-party/blob/master/.travis.yml"
@@ -13,13 +15,17 @@ branches:
 
 
 install:
+  - cd backend
   - bundle install --jobs=3 --retry=3
+  - cd ..
 
 script:
-  - bundle exec rake rspec
+  - cd backend
+  - bundle exec rake spec
   - zip -r latest *
   - mkdir -p deploy_folder
   - mv latest.zip deploy_folder/latest.zip
+  - cd ..
 
 #This script will upload the built containers to ECR to be deployed on a single EC2 instance with docker
 #Give everything to ECR
