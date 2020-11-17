@@ -8,6 +8,7 @@ env:
   - AWS_USER_ID="564835583352" AWS_ECR_API="564835583352.dkr.ecr.us-east-1.amazonaws.com/backend_web" AWS_REGION="us-east-1" REFERENCE="https://github.com/travis-ci/cat-party/blob/master/.travis.yml"
 services:
    - docker
+   - postgresql
 branches:
     only:
         - master
@@ -18,6 +19,9 @@ install:
   - cd backend
   - bundle install --jobs=3 --retry=3
   - cd ..
+
+before_script:
+  - psql -c 'create database myapp_test;' -U postgres
 
 script:
   - cd backend

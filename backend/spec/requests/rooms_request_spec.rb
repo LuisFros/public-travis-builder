@@ -5,7 +5,7 @@ RSpec.describe "Rooms", type: :request do
         headers = { "ACCEPT" => "application/json" }
         post "/rooms", :params => { :name => 'TestRoom' }, :headers => headers
     
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq("2pplication/json")
         expect(response).to have_http_status(:ok)
       end
 
