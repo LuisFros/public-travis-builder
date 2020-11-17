@@ -3,6 +3,7 @@
 - https://aws.amazon.com/premiumsupport/knowledge-center/codedeploy-agent-non-root-profile/
 - https://docs.aws.amazon.com/codedeploy/latest/userguide/troubleshooting-deployments.html#troubleshooting-deployments-lifecycle-event-failures
 
+
 ## CI/CD
 1. Travic CI se usa para hacer el CI/CD conecatado con CodeDeploy + S3.
 2. El release se comprime en un ZIP
