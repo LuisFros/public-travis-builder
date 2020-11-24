@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "61a3d6d1-40d8-493a-8b0e-4f5d5b96ad89",
+		"name": "Rooms",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a room",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "roomzssd",
+							"type": "text"
+						},
+						{
+							"key": "private_room",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/rooms/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"rooms",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "roomsitafinal11",
+							"disabled": true
+						},
+						{
+							"key": "private_room",
+							"value": "false",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "See rooms list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/rooms",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get one room data (Title + messages)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/rooms/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"rooms",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send message to room",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "room_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "hola, soy el mauritox",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/sendmessage",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sendmessage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send invitation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "receiver_username",
+							"value": "mauritoxx",
+							"type": "text"
+						},
+						{
+							"key": "room_id",
+							"value": "46",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/invitation",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"invitation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my invitations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/invitation?user_id=1&state=Pending",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"invitation"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "1"
+						},
+						{
+							"key": "state",
+							"value": "Pending"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit invitation state",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "state",
+							"value": "Accepted",
+							"type": "text"
+						},
+						{
+							"key": "invitation_id",
+							"value": "16",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/invitation",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"invitation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my private rooms",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user_id",
+						"value": "134",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/privaterooms",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"privaterooms"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
