@@ -1,5 +1,5 @@
-class RoomsController < ApiController
-  skip_before_action :authorized
+class RoomsController < ApplicationController
+  #skip_before_action :authorized
   # Loads:
   # @rooms = all rooms
   # @room = current room when applicable
@@ -20,32 +20,32 @@ class RoomsController < ApiController
   def create
     room_name = params[:name]
     private_room = params[:private_room]
-    current_user = User.find_by(id: params[:user_id])
-    puts current_user.username
-    puts valid_token?
-    if valid_token? == current_user.username
-      user = params[:user_id]
-      if Room.find_by name: room_name
-        return render json: {
-          "error": "Another room already has that name"
-        }
-      else
-        @room = Room.new permitted_parameters
-        if @room.save
-          if private_room
-            current_user.rooms << @room
-          end
-          render json: @room
-        else
-          return render json: {
-            "error": "error creating room."
-          }
-        end
-      end
-    else
+    if Room.find_by name: room_name
       return render json: {
-        "error": "you don't have permissions."
+        "error": "Another room already has that name"
       }
+    else
+      puts current_user.id
+      @room = Room.create({
+        name: room_name,
+        private_room: private_room,
+        user_id: current_user.id,
+    })
+      if @room.save
+        # if room is created as a private one, we make user join room automatically.
+        if private_room
+          puts "ROOM IS PRIVATE. ADDING ROOM TO"
+          puts current_user
+          #current_user = User.find_by(id: params[:user_id])
+          current_user.rooms << @room
+          puts current_user.rooms
+        end
+        render json: @room
+      else
+        return render json: {
+          "error": "error creating room."
+        }
+      end
     end
   end
 
@@ -64,10 +64,7 @@ class RoomsController < ApiController
   def show
     room = Room.find_by(id: params[:id])
     if room
-      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id], hidden: false)
-        .select('room_messages.id, room_messages.room_id, room_messages.user_id, room_messages.message,'\
-          'room_messages.created_at, room_messages.updated_at, users.username, users.thumbnail_url'
-        )
+      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id]).select('room_messages.*, users.username, users.thumbnail_url')
       # render json: {
       #   "room": room,
       #   "messages": messages
@@ -126,7 +123,7 @@ class RoomsController < ApiController
   end
 
   def private
-    current_user = User.find_by(id: params[:user_id])
+    #current_user = User.find_by(id: params[:user_id])
     private_rooms = current_user.rooms
     return render json: {
       "privaterooms": private_rooms

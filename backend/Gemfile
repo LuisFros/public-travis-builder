@@ -44,22 +44,14 @@ gem 'aws-sdk'
 #HTTParty to manage HTTP requests
 gem 'httparty', '~> 0.13.7'
 
-gem 'json-jwt'
+gem 'jwt'
 
-# AWS-SDK
-# Cognito gems
-gem 'aws-sdk-cognitoidentity'
-gem 'aws-sdk-cognitoidentityprovider'
-
-# CRUD actions for AdminUsers
-gem 'activeadmin'
+gem 'newrelic_rpm'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'dotenv-rails'
-  # Run against the latest stable release
-  gem 'rspec-rails', '~> 4.0.1'
 end
 
 group :development do
