@@ -2,6 +2,7 @@
 
 language: ruby
 cache: bundler
+gemfile: backend/Gemfile
 rvm:
   - 2.5.8
 
@@ -14,29 +15,27 @@ branches:
     only:
         - master
 
-
+before_install:
+  - cd backend
 
 install:
-  - cd backend
   - bundle install --jobs=3 --retry=3
-  - cd ..
 
 before_script:
   - psql -c 'create database myapp_test;' -U postgres
+  - bundle exec rake db:migrate RAILS_ENV=test
+  - bundle exec rspec
 
 script:
-  - cd backend
   - bundle exec rake db:migrate RAILS_ENV=test
   - bundle exec rspec
   - zip -r latest *
   - mkdir -p deploy_folder
   - mv latest.zip deploy_folder/latest.zip
-  - cd ..
 
 #This script will upload the built containers to ECR to be deployed on a single EC2 instance with docker
 #Give everything to ECR
 before_deploy:
-  - cd backend
   - docker --version  # document the version travis is using
   - pip install --user awscli # install aws cli w/o sudo
   - export PATH=$PATH:$HOME/.local/bin # put aws in the path
@@ -45,7 +44,6 @@ before_deploy:
   - docker tag backend_web:latest $AWS_ECR_API:latest
   - docker push $AWS_ECR_API:latest
   - docker images
-  - cd ..
 
 deploy:
 - provider: s3 #To upload the code to s3
