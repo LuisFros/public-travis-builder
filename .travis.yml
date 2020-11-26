@@ -1,6 +1,7 @@
 #Deploy script for Foku-api
 
 language: ruby
+cache: bundler
 rvm:
   - 2.5.8
 
@@ -25,7 +26,8 @@ before_script:
 
 script:
   - cd backend
-  - bundle exec rake spec
+  - bundle exec rake db:migrate RAILS_ENV=test
+  - bundle exec rspec
   - zip -r latest *
   - mkdir -p deploy_folder
   - mv latest.zip deploy_folder/latest.zip
