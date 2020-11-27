@@ -11,18 +11,11 @@ if ['development', 'test'].include? ENV['RAILS_ENV']
 end
 module Myapp
   class Application < Rails::Application
-    # Middleware for ActiveAdmin
-    #config.session_store :cookie_store
-    config.middleware.use ActionDispatch::Flash
-    config.middleware.use Rack::MethodOverride
-    config.middleware.use ActionDispatch::Cookies
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
-    config.api_only = false
+    config.api_only = true
     config.active_job.queue_adapter = :sidekiq
 
-    config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
@@ -36,9 +29,8 @@ module Myapp
     end
 
     Aws.config.update({
-      credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"]),
+      credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
     })
-    
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

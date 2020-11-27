@@ -44,25 +44,9 @@ class RoomsController < ApplicationController
         render json: @room
       else
         return render json: {
-          "error": "Another room already has that name"
+          "error": "error creating room."
         }
-      else
-        @room = Room.new permitted_parameters
-        if @room.save
-          if private_room
-            current_user.rooms << @room
-          end
-          render json: @room
-        else
-          return render json: {
-            "error": "error creating room."
-          }
-        end
       end
-    else
-      return render json: {
-        "error": "you don't have permissions."
-      }
     end
   end
 
@@ -81,10 +65,7 @@ class RoomsController < ApplicationController
   def show
     room = Room.find_by(id: params[:id])
     if room
-      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id], hidden: false)
-        .select('room_messages.id, room_messages.room_id, room_messages.user_id, room_messages.message,'\
-          'room_messages.created_at, room_messages.updated_at, users.username, users.thumbnail_url'
-        )
+      messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:id]).select('room_messages.*, users.username, users.thumbnail_url')
       # render json: {
       #   "room": room,
       #   "messages": messages
