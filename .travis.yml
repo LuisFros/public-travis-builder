@@ -4,6 +4,7 @@ language: ruby
 cache: bundler
 rvm:
   - 2.5.8
+gemfile: backend/Gemfile
 
 env:
   - AWS_USER_ID="564835583352" AWS_ECR_API="564835583352.dkr.ecr.us-east-1.amazonaws.com/backend_web" AWS_REGION="us-east-1" REFERENCE="https://github.com/travis-ci/cat-party/blob/master/.travis.yml"
@@ -17,21 +18,17 @@ branches:
 
 
 install:
-  - cd backend
   - bundle install --jobs=3 --retry=3
-  - cd ..
 
 before_script:
   - psql -c 'create database myapp_test;' -U postgres
 
 script:
-  - cd backend
   # - bundle exec rake db:migrate RAILS_ENV=test
   # - bundle exec rspec
   - zip -r latest *
   - mkdir -p deploy_folder
   - mv latest.zip deploy_folder/latest.zip
-  - cd ..
 
 #This script will upload the built containers to ECR to be deployed on a single EC2 instance with docker
 #Give everything to ECR
