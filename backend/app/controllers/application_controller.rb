@@ -33,15 +33,20 @@ class ApplicationController < ActionController::API
   def manage_auth
     decoded = JWT.decode request.headers["Authorization"], nil, false
     user_email = decoded[0]["email"]
-    user = User.find_by(username: user_email)
-    if !user
-      parameters = ActionController::Parameters.new({
-        user: {
-          username: user_email,
-          password: "password"
-        }
-      })
-      @user = User.create(parameters.require(:user).permit(:username, :password))
+    validator = GoogleIDToken::Validator.new
+    validated = validator.check(request.headers["Authorization"], decoded[0]['aud'], "343317939754-2g02mvq4pgoji7il8j2bh9gmphi0vbnl.apps.googleusercontent.com")
+    if validated
+      puts "token has been validated by backend"
+      user = User.find_by(username: user_email)
+      if !user
+        parameters = ActionController::Parameters.new({
+          user: {
+            username: user_email,
+            password: "password"
+          }
+        })
+        @user = User.create(parameters.require(:user).permit(:username, :password))
+      end
     end
   end
   
