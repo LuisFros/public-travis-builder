@@ -45,7 +45,7 @@ class ApplicationController < ActionController::API
             password: "password"
           }
         })
-        @user = User.create(parameters.require(:user).permit(:username, :password))
+        @user = User.create(parameters.require(:user).permit(:username))
       end
     end
   end
