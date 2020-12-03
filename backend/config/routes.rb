@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  Healthcheck.routes(self)
   resources :room_messages
   resources :rooms
   resources :users, only: [:new, :create, :uploadphoto]
