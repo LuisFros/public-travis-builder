@@ -1,4 +1,4 @@
-class InvitationsController < ApplicationController
+class InvitationsController < ApiController
     # Temporary workaround for no user login. 
     #               vvv
     #skip_before_action :authorized

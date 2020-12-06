@@ -1,4 +1,4 @@
-class ApplicationController < ActionController::API
+class ApiController < ActionController::API
   include ActionController::RequestForgeryProtection
   #before_action :authorized
   helper_method :current_user
@@ -50,4 +50,24 @@ class ApplicationController < ActionController::API
     end
   end
   
+end
+
+class ApplicationController < ActionController::Base
+  include ActionController::RequestForgeryProtection
+  protect_from_forgery prepend: true
+  before_action :authenticate_admin_user!
+  # your code here
+  def logged_in?
+    !current_admin_user.nil? && current_admin_user.is_admin
+  end
+
+  def authenticate_admin_user!
+    if !logged_in?
+      redirect_to new_admin_user_session_path
+    end
+  end
+
+  def current_admin_user
+    User.find_by(id: cookies.signed[:user_id])
+  end
 end

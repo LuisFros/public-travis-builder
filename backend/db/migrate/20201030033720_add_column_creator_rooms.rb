@@ -3,6 +3,6 @@ class AddColumnCreatorRooms < ActiveRecord::Migration[5.2]
     add_column :rooms, :user_id, :integer
   end
   def down
-    remove_column :rooms, :user_id, :boolean
+    remove_column :rooms, :user_id, :integer
   end
 end

@@ -1,50 +1,9 @@
-class RoomMessagesController < ApplicationController
+class RoomMessagesController < ApiController
   #before_action :load_entities
   #skip_before_action :authorized
   before_action :manage_auth
   
-  def create
-    messagetxt = params.dig(:room_message, :message)
-    new_message = ""
-    if messagetxt == "/reset"
-      @room.room_messages.destroy_all
-      @room.reversed = false
-      @room.save
-      new_message = "Room has been reset"
-    elsif messagetxt == "/reverse"
-      @room.reversed = !@room.reversed
-      @room.save
-      new_message = "Messages have been reversed!"
-    elsif messagetxt[0..9] == "/nameroom "
-      messagetxt.slice!(0..9)
-      messagetxt = messagetxt.strip
-      new_message = "Error: New room name can't be blank!"
-      if !messagetxt.nil? && !messagetxt.empty?
-        new_name = messagetxt.strip
-        @search = Room.find_by_name(new_name)
-        if !@search.blank?
-          new_message = "Error: Room name \'#{new_name}\' already exists"
-        else 
-          prev_name = @room.name 
-          @room.name = new_name
-          @room.save
-          new_message = "Room name has changed: (#{prev_name}->#{@room.name}) succesfully"
-        end
-      end
-    end
-    if !new_message.nil? && !new_message.empty?
-      if @room.reversed
-        new_message = new_message.reverse
-      end
-      messagetxt = new_message
-    end
-    if !messagetxt.nil? && !messagetxt.empty?
-      @room_message = RoomMessage.create user: current_user,
-                                       room: @room,
-                                       message: messagetxt
-    end
-    redirect_to room_path(@room)
-  end
+  def create;  end
 
   def new_message
     if !params[:room_id]
@@ -81,7 +40,7 @@ class RoomMessagesController < ApplicationController
       puts "---------------"
       puts "no mention"
     end
-    message = RoomMessage.create user: current_user, room: room, message: params[:message]
+    message = RoomMessage.create user: current_user, room: room, message: params[:message], original_msg: params[:message]
     room_messages = RoomMessage.joins(:room).joins(:user).where(room_id: params[:room_id]).select('room_messages.*, users.username')
 
     return render json: {

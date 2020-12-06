@@ -1,12 +1,14 @@
 version: '3'
 services:
-  api:
-    container_name: backend_web
-    image: 564835583352.dkr.ecr.us-east-1.amazonaws.com/backend_web:latest
+  web:
+    build: .
     command: bash -c "bundle exec rake db:migrate && bundle exec rails s -p 80 -b '0.0.0.0'"
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     volumes:
       - .:/myapp
     ports:
       - "80:80"
     env_file:
-      /home/ubuntu/.env.prod
+      .env.prod
+
