@@ -44,6 +44,10 @@ gem 'aws-sdk'
 #HTTParty to manage HTTP requests
 gem 'httparty', '~> 0.13.7'
 
+# CRUD actions for AdminUsers
+gem 'activeadmin'
+gem 'google_sign_in'
+
 gem 'jwt'
 
 gem 'newrelic_rpm'

@@ -1,6 +1,5 @@
 class User < ApplicationRecord
     validates :username, uniqueness: true, presence: true
-    has_one_attached :photo
     has_many :invitations
     has_many :rooms, through: :invitations
     has_many :created_rooms, foreign_key: "user_id", class_name: "Room"

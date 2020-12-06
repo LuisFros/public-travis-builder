@@ -1,0 +1,11 @@
+<h1>Login</h1>
+<% flash.each do |type, msg| %>
+  <div>
+    <%= msg %>
+  </div>
+<% end %>
+<br>
+<%= google_sign_in_button proceed_to: 
+create_admin_user_session_path do %>
+  Sign in with my <%= image_tag('google_logo.svg', alt: 'Google') %> account
+<% end %>

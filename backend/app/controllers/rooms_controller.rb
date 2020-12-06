@@ -1,4 +1,4 @@
-class RoomsController < ApplicationController
+class RoomsController < ApiController
   #skip_before_action :authorized
   # Loads:
   # @rooms = all rooms
@@ -126,7 +126,7 @@ class RoomsController < ApplicationController
 
   def private
     #current_user = User.find_by(id: params[:user_id])
-    private_rooms = current_user.rooms
+    private_rooms = current_user.rooms.where(private_room: true)
     return render json: {
       "privaterooms": private_rooms
     }

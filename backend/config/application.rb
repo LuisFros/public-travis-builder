@@ -11,9 +11,12 @@ if ['development', 'test'].include? ENV['RAILS_ENV']
 end
 module Myapp
   class Application < Rails::Application
+    config.middleware.use ActionDispatch::Flash
+    config.middleware.use Rack::MethodOverride
+    config.middleware.use ActionDispatch::Cookies
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
-    config.api_only = true
+    config.api_only = false
     config.active_job.queue_adapter = :sidekiq
 
 
